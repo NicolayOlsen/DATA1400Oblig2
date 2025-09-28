@@ -65,12 +65,20 @@ public class Robot {
         }
 
         // Sjekk om det er søndag. Kan bare gå i parken på søndager.
-        if(world.isSunday()) {
+        if(!world.isSunday()) {
+            System.out.println("Kan ikke gå til parken, det er ikke søndag");
+            return false;
 
         }
 
         // Sjekk batterinivå. En bot trenger 1% batterinivå per 100 meter for å gå til parken.
-
+        int requiredBattery = this.distancetoPark / 100;
+        if(this.batteryLevel < requiredBattery){
+            System.out.println("Kan ikke gå til parken, for lite batteri");
+            return false;
+        }
+        this.batteryLevel -= requiredBattery;
+        System.out.println(this.name + "gikk til parken. Batteri igjen:" + this.batteryLevel + "%.");
         return true;
     }
 
@@ -79,4 +87,30 @@ public class Robot {
        // bottypen må være av type B-Bot (hint .equals)
        // En bot trenger minimum 50% batterikapasitet for å være med
        // Det kan ikke være mandag. Da er danseklubben stengt.
+    public boolean canDanceAtClub(World world) {
+        System.out.println(this.name + "Skjekker om den kan være med på danseklubben..");
+
+        if(!this.botType.equals("B-Bot")) {
+            System.out.println("Kan ikke danse, feil bottype " + this.botType);
+            return false;
+        }
+
+        if(this.batteryLevel < 50.0){
+            System.out.println("Kan ikke danse, batterinivået blir under 50%");
+            return false;
+        }
+
+        if(world.getDay()% 7 == 1){
+            System.out.println("Kan ikke danse, det er mandag");
+            return false;
+
+        }
+
+        this.batteryLevel -= 50.0;
+        System.out.println(this.name + "Danset. Batteri igjen:" + this.batteryLevel + "%.");
+
+        return true;
+
+    }
+
 }
